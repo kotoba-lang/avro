@@ -25,17 +25,11 @@ on:
   pull_request:
     paths:
       - ".github/**"
-    paths-ignore:
-      - "kotoba/**"
-      - ".github/workflows/kotoba*.yml"
   push:
     branches:
     - main
     paths:
       - ".github/**"
-    paths-ignore:
-      - "kotoba/**"
-      - ".github/workflows/kotoba*.yml"
 
 permissions:
   contents: read
