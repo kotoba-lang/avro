@@ -18,8 +18,14 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'kotoba/**'
+      - '.github/workflows/kotoba*.yml'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'kotoba/**'
+      - '.github/workflows/kotoba*.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

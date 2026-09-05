@@ -1,0 +1,46 @@
+;; Licensed to the Apache Software Foundation (ASF) under one
+;; or more contributor license agreements.  See the NOTICE file
+;; distributed with this work for additional information
+;; regarding copyright ownership.  The ASF licenses this file
+;; to you under the Apache License, Version 2.0 (the
+;; "License"); you may not use this file except in compliance
+;; with the License.  You may obtain a copy of the License at
+;;
+;;     https://www.apache.org/licenses/LICENSE-2.0
+;;
+;; Unless required by applicable law or agreed to in writing,
+;; software distributed under the License is distributed on an
+;; "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+;; KIND, either express or implied.  See the License for the
+;; specific language governing permissions and limitations
+;; under the License.
+
+;; Honest Kotoba v1: Avro Object Container File identification only.
+;; Magic Obj (bytes 0-2) plus the one-byte version (byte 3).
+;; Does not parse JSON schema, codec name, sync marker, or data blocks.
+;; No writer, no reader engine, no FFI. i64-v1 / wasm32-kotoba-v1.
+
+(ns avro.header (:export [main]))
+
+;; One literal per fixture byte. checks.sh compares these to
+;; fixtures/tiny-header.avro (Obj + version 1).
+(defn fixture-byte [i]
+  (if (= i 0) 79
+    (if (= i 1) 98
+      (if (= i 2) 106
+        (if (= i 3) 1
+          0)))))
+
+(defn magic-ok []
+  (and (= (fixture-byte 0) 79)
+       (= (fixture-byte 1) 98)
+       (= (fixture-byte 2) 106)))
+
+(defn version []
+  (fixture-byte 3))
+
+;; Returns version when magic is Obj, otherwise 0.
+(defn main []
+  (if (magic-ok)
+    (version)
+    0))
